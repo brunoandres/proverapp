@@ -116,7 +116,7 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
   <script src="vistas/bower_components/morris.js/morris.min.js"></script>
 
   <!-- ChartJS http://www.chartjs.org/-->
-  <script src="vistas/bower_components/Chart.js/Chart.js"></script>
+  <script src="vistas/bower_components/chart.js/Chart.js"></script>
 
   <!-- Select2 -->
   <script src="vistas/bower_components/select2/dist/js/select2.full.min.js"></script>
