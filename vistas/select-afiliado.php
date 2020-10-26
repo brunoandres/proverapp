@@ -1,6 +1,6 @@
 <?php
 
-$con=mysqli_connect('localhost','root','','soyem')
+$con=mysqli_connect('localhost','soyem','vMis823rWf','soyem_')
     or die("connection failed".mysqli_errno());
 mysqli_set_charset($con, "utf8");
 if(isset($_POST['search'])){

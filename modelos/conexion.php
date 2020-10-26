@@ -20,7 +20,7 @@ class ConexionSoyem{
 
 	static public function conectarSoyem(){
 
-		$link = new PDO("mysql:host=localhost;dbname=soyem",
+		$link = new PDO("mysql:host=localhost;dbname=soyem_",
 			            "root",
 			            "");
 

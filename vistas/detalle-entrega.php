@@ -1,7 +1,7 @@
 <?php
  if(isset($_POST["entregas_id"])){
       $output = '';
-      $connect = mysqli_connect("localhost", "root", "", "proverapp");
+      $connect = mysqli_connect("localhost", "soyem", "vMis823rWf", "soyem_proveeduria");
       mysqli_set_charset($connect, "utf8");
       $query = "SELECT a.numero as entrega,b.*,c.nombre,d.estado FROM entregas a, pedidos b,usuarios c, estados d WHERE a.id = b.entregas_id AND d.id = b.estados_id AND b.usuarios_id = c.id AND a.id = '".$_POST["entregas_id"]."'";
       $result = mysqli_query($connect, $query);

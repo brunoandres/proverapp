@@ -86,7 +86,7 @@ var bar = new Morris.Bar({
   barColors: ['#0af'],
   xkey: 'y',
   ykeys: ['a'],
-  labels: ['ventas'],
+  labels: ['pedidos'],
   preUnits: '$',
   hideHover: 'auto'
 });

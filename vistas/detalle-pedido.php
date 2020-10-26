@@ -1,7 +1,7 @@
 <?php
  if(isset($_POST["pedidos_id"])){
       $output = '';
-      $connect = mysqli_connect("localhost", "root", "", "proverapp");
+      $connect = mysqli_connect("localhost", "soyem", "vMis823rWf", "soyem_proveeduria");
       mysqli_set_charset($connect, "utf8");
       $query = "SELECT * FROM pedidos WHERE id = '".$_POST["pedidos_id"]."'";
       $result = mysqli_query($connect, $query);

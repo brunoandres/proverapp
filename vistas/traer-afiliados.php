@@ -1,5 +1,5 @@
 <?php
-$con=mysqli_connect('localhost','root','','soyem')or die("connection failed".mysqli_errno());
+$con=mysqli_connect('localhost','soyem','vMis823rWf','soyem_')or die("connection failed".mysqli_errno());
 mysqli_set_charset($con, "utf8");
 
 $request=$_REQUEST;
