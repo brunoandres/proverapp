@@ -159,6 +159,20 @@ class ControladorEntregas{
 	}
 
 	/*=============================================
+	MOSTRAR CANTIDAD DE PEDIDOS POR ENTREGA EN ESTADO PREPARADOS
+	=============================================*/
+
+	static public function ctrMostrarPedidosPreparados($item, $valor){
+
+		$tabla = "pedidos";
+
+		$respuesta = ModeloEntregas::mdlMostrarPedidosPreparados($tabla, $item, $valor);
+
+		return $respuesta;
+
+	}
+
+	/*=============================================
 	MOSTRAR CANTIDAD PEDIDOS POR ENTREGA
 	=============================================*/
 

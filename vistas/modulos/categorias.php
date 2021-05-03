@@ -34,7 +34,7 @@ if ($_SESSION["perfil"] === "Administrador" || $_SESSION["perfil"] === "Pedidos"
 
         <button class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarCategoria" <?php echo $botonAcciones; ?>>
 
-          Agregar categoría
+          Agregar Categoría
 
         </button>
 

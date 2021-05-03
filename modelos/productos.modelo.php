@@ -77,36 +77,48 @@ class ModeloProductos{
 	=============================================*/
 	static public function mdlIngresarProducto($tabla, $datos){
 
-		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(codigo, nombre, stock, precio, categorias_id,
-		medida_id, descripcion, publicado, imagen) VALUES (:codigo, :nombre, :stock, :precio, :categoria,
-		:unidad, :descripcion, :publicado, :imagen)");
+		$pdo=Conexion::conectar();
 
-		$stmt->bindParam(":codigo", $datos["codigo"], PDO::PARAM_STR);
-		$stmt->bindParam(":nombre", $datos["nombre"], PDO::PARAM_STR);
-		$stmt->bindParam(":stock", $datos["stock"], PDO::PARAM_INT);
-		$stmt->bindParam(":precio", $datos["precio"], PDO::PARAM_INT);
-		$stmt->bindParam(":categoria", $datos["categoria"], PDO::PARAM_STR);
-		$stmt->bindParam(":unidad", $datos["unidad"], PDO::PARAM_STR);
-		$stmt->bindParam(":descripcion", $datos["descripcion"], PDO::PARAM_STR);
-		$stmt->bindParam(":publicado", $datos["estado"], PDO::PARAM_INT);
-		$stmt->bindParam(":imagen", $datos["imagen"], PDO::PARAM_STR);
+		try {
 
-		if($stmt->execute()){
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+			$pdo->beginTransaction();
+
+			$stmt = $pdo->prepare("INSERT INTO $tabla(codigo, nombre, stock, precio, categorias_id,
+			medida_id, descripcion, publicado, imagen) VALUES (:codigo, :nombre, :stock, :precio, :categoria,
+			:unidad, :descripcion, :publicado, :imagen)");
+
+			$stmt->bindParam(":codigo", $datos["codigo"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre", $datos["nombre"], PDO::PARAM_STR);
+			$stmt->bindParam(":stock", $datos["stock"], PDO::PARAM_INT);
+			$stmt->bindParam(":precio", $datos["precio"], PDO::PARAM_INT);
+			$stmt->bindParam(":categoria", $datos["categoria"], PDO::PARAM_STR);
+			$stmt->bindParam(":unidad", $datos["unidad"], PDO::PARAM_STR);
+			$stmt->bindParam(":descripcion", $datos["descripcion"], PDO::PARAM_STR);
+			$stmt->bindParam(":publicado", $datos["estado"], PDO::PARAM_INT);
+			$stmt->bindParam(":imagen", $datos["imagen"], PDO::PARAM_STR);
+
+			$stmt->execute();
+			$pdo->commit();
+
+			$msj = "ok";
 
 			$query = "INSERT INTO $tabla(codigo, nombre, stock, precio, categorias_id,medida_id, descripcion, publicado, imagen) VALUES ({$datos["codigo"]}, {$datos["nombre"]}, {$datos["stock"]}, {$datos["precio"]},{$datos["categoria"]},{$datos["unidad"]},{$datos["descripcion"]}, {$datos["publicado"]}, {$datos["imagen"]})";
 			$accion = "Registro Nuevo Producto";
 			$auditar = ModeloAuditar::auditar($accion,$query,$_SESSION["usuario"]);
 
-			return "ok";
 
-		}else{
+		} catch (Exception $e) {
 
-			return "error";
-			//print_r($stmt->errorInfo());
+			$pdo->rollBack();
+			echo "Fallo: " . $e->getMessage();
+			$msj = "error";
 
 		}
 
-		$stmt->close();
+		return $msj;
+		$pdo = null;
 		$stmt = null;
 
 	}
@@ -116,32 +128,47 @@ class ModeloProductos{
 	=============================================*/
 	static public function mdlEditarProducto($tabla, $datos){
 
-		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET nombre = :nombre,
-		descripcion = :descripcion, imagen = :imagen, stock = :stock, precio = :precio, publicado = :estado, medida_id = :unidad
-		WHERE id = :id");
+		$pdo=Conexion::conectar();
 
-		$stmt->bindParam(":id", $datos["id"], PDO::PARAM_INT);
-		$stmt->bindParam(":estado", $datos["estado"], PDO::PARAM_STR);
-		$stmt->bindParam(":nombre", $datos["nombre"], PDO::PARAM_STR);
-		$stmt->bindParam(":unidad", $datos["unidad"], PDO::PARAM_STR);
-		$stmt->bindParam(":descripcion", $datos["descripcion"], PDO::PARAM_STR);
-		$stmt->bindParam(":imagen", $datos["imagen"], PDO::PARAM_STR);
-		$stmt->bindParam(":stock", $datos["stock"], PDO::PARAM_STR);
-		$stmt->bindParam(":precio", $datos["precio"], PDO::PARAM_STR);
+		try {
 
-		if($stmt->execute()){
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+			$pdo->beginTransaction();
+
+			$stmt = $pdo->prepare("UPDATE $tabla SET nombre = :nombre,
+			descripcion = :descripcion, imagen = :imagen, stock = :stock, precio = :precio, publicado = :estado, medida_id = :unidad
+			WHERE id = :id");
+
+			$stmt->bindParam(":id", $datos["id"], PDO::PARAM_INT);
+			$stmt->bindParam(":estado", $datos["estado"], PDO::PARAM_STR);
+			$stmt->bindParam(":nombre", $datos["nombre"], PDO::PARAM_STR);
+			$stmt->bindParam(":unidad", $datos["unidad"], PDO::PARAM_STR);
+			$stmt->bindParam(":descripcion", $datos["descripcion"], PDO::PARAM_STR);
+			$stmt->bindParam(":imagen", $datos["imagen"], PDO::PARAM_STR);
+			$stmt->bindParam(":stock", $datos["stock"], PDO::PARAM_STR);
+			$stmt->bindParam(":precio", $datos["precio"], PDO::PARAM_STR);
+
+			$stmt->execute();
+
+			$pdo->commit();
+
 			$query = "UPDATE $tabla SET nombre = {$datos["nombre"]},descripcion = {$datos["descripcion"]}, imagen = {$datos["imagen"]}, stock = {$datos["stock"]}, precio = {$datos["precio"]}, publicado = {$datos["estado"]}, medida_id = {$datos["unidad"]} WHERE id = {$datos["id"]}";
 			$accion = "Actualizo Producto ID: ".$datos["id"];
 			$auditar = ModeloAuditar::auditar($accion,$query,$_SESSION["usuario"]);
-			return "ok";
 
-		}else{
+			$msj = "ok";
 
-			//return "error";
-			print_r($stmt->errorInfo());
+		} catch (Exception $e) {
+
+			$pdo->rollBack();
+			echo "Fallo: " . $e->getMessage();
+			$msj = "error";
+
 		}
 
-		$stmt->close();
+		return $msj;
+		$pdo = null;
 		$stmt = null;
 
 	}

@@ -72,6 +72,7 @@ $(".tablas").on("click", ".btnEditarUsuario", function(){
 			$("#editarUsuario").val(respuesta["usuario"]);
 			$("#editarPerfil").html(respuesta["perfil"]);
 			$("#editarPerfil").val(respuesta["perfil"]);
+			$("#idUsuario").val(respuesta["id"]);
 			$("#fotoActual").val(respuesta["foto"]);
 
 			$("#passwordActual").val(respuesta["password"]);

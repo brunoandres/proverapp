@@ -1,4 +1,22 @@
 <?php
+if (isset($_GET["socio"])) {
+  if ($_GET["socio"] == "NO") {
+    echo'<script>
+
+    swal({
+      title: "El afiliado no está adherido a la obra social!",
+      text: "Indique el motivo del pedido en observaciones...",
+      type: "warning",
+      timer: 8000
+    }).then(function() {
+        //window.location = "pedidos";
+    });
+
+    </script>';
+
+  }
+
+}
 
 if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") {
 
@@ -63,35 +81,63 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
                 ENTRADA FECHA PEDIDO
                 ======================================-->
 
-                <div class="form-group">
-                  <label>Fecha pedido:</label>
+                <div class="row">
 
-                  <div class="input-group date">
-                    <div class="input-group-addon">
-                      <i class="fa fa-calendar"></i>
+                  <div class="col-md-6">
+
+                    <div class="form-group">
+                      <label>Fecha Pedido:</label>
+
+                      <div class="input-group date">
+                        <div class="input-group-addon">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" class="form-control pull-right datepicker" value="<?php echo date("d/m/Y"); ?>" readonly name="fechaPedido" autocomplete="off">
+                      </div>
+
                     </div>
-                    <input type="text" class="form-control pull-right" id="datepicker" value="<?php echo date("d/m/Y"); ?>" readonly name="fechaPedido" autocomplete="off">
+
+                  </div>
+
+                  <div class="col-md-6">
+
+                    <div class="form-group">
+                      <label>Fecha de Pago:</label>
+
+                      <div class="input-group date">
+                        <div class="input-group-addon">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" class="form-control pull-right datepicker" value="<?php echo date("d/m/Y", strtotime("+1 month")); ?>" readonly name="fechaPago" autocomplete="off">
+                      </div>
+
+                    </div>
+
                   </div>
 
                 </div>
 
+
+
                 <!--=====================================
                 ENTRADA DEL VENDEDOR
-                ======================================-->
+                ======================================
                 <div class="form-group">
-                <p><strong>Usuario</strong> </p>
+                <p><strong>Usuario:</strong> </p>
                   <div class="input-group">
 
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
                     <input type="text" class="form-control" id="nuevoVendedor" value="<?php echo $_SESSION["nombre"]; ?>" readonly>
 
-                    <input type="hidden" name="idUsuario" value="<?php echo $_SESSION["id"]; ?>">
+
+
 
                   </div>
 
                 </div>
-
+                -->
+                <input type="hidden" name="idUsuario" value="<?php echo $_SESSION["id"]; ?>">
                 <!--=====================================
                 ENTRADA DEL CÓDIGO
                 ======================================-->
@@ -149,9 +195,13 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
 
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
 
-                    <input type="text" class="form-control" id="seleccionarAfiliado" required placeholder="Escriba el nombre del afiliado para seleccionar">
+                    <input type="text" class="form-control" id="seleccionarAfiliado" value="<?php if (isset($_GET["afiliado"])) {
+                      echo $_GET["afiliado"];
+                    } ?>" placeholder="Escriba el nombre del afiliado para seleccionar" required>
 
-                    <input type="hidden" name="seleccionarAfiliado" id="idAfiliado" required>
+                    <input type="hidden" name="seleccionarAfiliado" id="idAfiliado" value="<?php if (isset($_GET["ref"])) {
+                      echo SED::decryption($_GET["ref"]);
+                    } ?>" required>
 
                     <!--<select class="form-control" id="seleccionarAfiliado" name="seleccionarAfiliado" required>-->
 
@@ -220,7 +270,7 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
                         <tr>
                           <!--<th>Pago por Planilla</th>
                           <th>Pago en efectivo</th>    -->
-                          <th>Total Pedido</th>
+                          <th>Total Pedido:</th>
                         </tr>
 
                       </thead>
@@ -298,7 +348,7 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
 
 
                   <div class="col-xs-6" style="padding-right:0px">
-                  <label>Forma de pago:</label>
+                  <label>Forma de Pago:</label>
                      <div class="input-group">
 
                       <select class="form-control" id="metodoPago" name="metodoPago" required>
@@ -337,7 +387,7 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
                 <div class="form-group row">
 
                   <div class="col-xs-6" style="padding-right:0px">
-                  <label>Estado pedido:</label>
+                  <label>Estado Pedido:</label>
                      <div class="input-group">
 
                       <select class="form-control" id="estadoPedido" name="estadoPedido" required>
@@ -373,12 +423,16 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
             ENTRADA OBSERVACIONES
             ======================================-->
             <div class="form-group">
-            <p><strong>Observaciones</strong> </p>
+            <p><strong>Observaciones:</strong> </p>
               <div class="input-group">
 
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
 
-                <textarea style="resize: none;" class="form-control" rows="3" name="observaciones" placeholder="Ingrese alguna observación..."></textarea>
+                <textarea style="resize: none;" class="form-control" rows="3" id="observacion" name="observaciones" placeholder="Agregue alguna observación extra, por ejemplo si el afiliado no está adherido al 3% el motivo por el cúal se realiza el pedido." <?php if (isset($_GET["socio"])) {
+                  if ($_GET["socio"] == "NO") {
+                    echo "required";
+                  }
+                } ?>></textarea>
 
               </div>
 
@@ -423,9 +477,9 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
 
                  <tr>
                   <th style="width: 10px">#</th>
-                  <th>Imagen</th>
-                  <th>Precio</th>
-                  <th>Descripcion</th>
+                  <th>Nombre</th>
+                  <th>Descr.</th>
+                  <th>Precio</th>          
                   <th>Stock</th>
                   <th>Acciones</th>
                 </tr>

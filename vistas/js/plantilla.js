@@ -9,7 +9,8 @@ Data Table
 =============================================*/
 
 $(".tablas").DataTable({
-
+	pageLength : 100,
+	"order": [[ 0, "desc" ]],
 	"language": {
 
 		"sProcessing":     "Procesando...",

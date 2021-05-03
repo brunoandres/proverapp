@@ -31,7 +31,7 @@
 
     <h1>
 
-      Editar pedido <strong># <?php echo $pedido['numero']; ?> </strong>
+      Editar Pedido <strong># <?php echo $pedido['numero']; ?> </strong>
 
     </h1>
 
@@ -67,18 +67,45 @@
                 ENTRADA FECHA PEDIDO
                 ======================================-->
 
-                <div class="form-group">
-                  <label>Fecha pedido:</label>
+                <div class="row">
 
-                  <div class="input-group date">
-                    <div class="input-group-addon">
-                      <i class="fa fa-calendar"></i>
+                  <div class="col-md-6">
+
+                    <div class="form-group">
+                      <label>Fecha pedido:</label>
+
+                      <div class="input-group date">
+                        <div class="input-group-addon">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" class="form-control pull-right datepicker" value="<?php echo date('d/m/Y', strtotime($pedido['fecha_pedido'])); ?>" readonly name="fechaPedido" autocomplete="off">
+                        <input type="hidden" name="idPedido" value="<?php echo $pedido['id']; ?>">
+                      </div>
+
                     </div>
-                    <input type="text" class="form-control pull-right" id="datepicker" value="<?php echo date('d/m/Y', strtotime($pedido['fecha_pedido'])); ?>" readonly name="fechaPedido" autocomplete="off">
-                    <input type="hidden" name="idPedido" value="<?php echo $pedido['id']; ?>">
+
+                  </div>
+
+                  <div class="col-md-6">
+
+                    <div class="form-group">
+                      <label>Fecha pago:</label>
+
+                      <div class="input-group date">
+                        <div class="input-group-addon">
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" class="form-control pull-right datepicker" value="<?php echo date('d/m/Y', strtotime($pedido['fecha_pago'])); ?>" readonly name="fechaPago" autocomplete="off">
+
+                      </div>
+
+                    </div>
+
                   </div>
 
                 </div>
+
+
 
                 <input type="hidden" id="pagoEfectivoBD" name="" value="<?php echo $pedido['pago_efectivo']; ?>">
                 <input type="hidden" id="pagoPlanillaBD" name="" value="<?php echo $pedido['pago_planilla']; ?>">
@@ -86,7 +113,7 @@
 
                 <!--=====================================
                 ENTRADA DEL USUARIO
-                ======================================-->
+                ======================================
 
                 <div class="form-group">
 
@@ -96,15 +123,15 @@
 
                     <input type="text" class="form-control" id="usuarioPedido" value="<?php echo $usuario["nombre"]; ?>" readonly>
 
-                    <input type="hidden" name="idUsuario" value="<?php echo $usuario["id"]; ?>">
+
 
                   </div>
 
-                </div>
-
+                </div>-->
+                <input type="hidden" name="idUsuario" value="<?php echo $usuario["id"]; ?>">
                 <!--=====================================
                 ENTRADA DEL NUMERO DE PEDIDO
-                ======================================-->
+                ======================================
 
                 <div class="form-group">
 
@@ -112,12 +139,13 @@
 
                     <span class="input-group-addon"><i class="fa fa-key"></i></span>
 
-                   <input type="text" class="form-control" id="numeroPedido" name="numeroPedido" value="<?php echo $pedido["numero"]; ?>" readonly>
+
 
                   </div>
 
                 </div>
-
+                -->
+                <input type="hidden" class="form-control" id="numeroPedido" name="numeroPedido" value="<?php echo $pedido["numero"]; ?>" readonly>
                 <!--=====================================
                 ENTRADA DEL AFILIADO
                 BLOQUEO EL CAMPO AFILIADO PARA EDITAR PEDIDO, EN CASO
@@ -420,12 +448,12 @@
                <thead>
 
                  <tr>
-                  <th style="width: 10px">#</th>
-                  <th>Imagen</th>
-                  <th>Precio</th>
-                  <th>Descripcion</th>
-                  <th>Stock</th>
-                  <th>Acciones</th>
+                   <th style="width: 10px">#</th>
+                   <th>Nombre</th>
+                   <th>Descr.</th>
+                   <th>Precio</th>
+                   <th>Stock</th>
+                   <th>Acciones</th>
                 </tr>
 
               </thead>

@@ -349,7 +349,7 @@ MODAL EDITAR USUARIO
 
                 <span class="input-group-addon"><i class="fa fa-key"></i></span>
 
-                <input type="text" class="form-control input-lg" id="editarUsuario" name="editarUsuario" value="" readonly>
+                <input type="text" class="form-control input-lg" id="editarUsuario" name="editarUsuario" value="">
 
               </div>
 
@@ -366,6 +366,7 @@ MODAL EDITAR USUARIO
                 <input type="password" class="form-control input-lg" name="editarPassword" placeholder="Escriba la nueva contraseña">
 
                 <input type="hidden" id="passwordActual" name="passwordActual">
+                <input type="hidden" id="idUsuario" name="idUsuario">
 
               </div>
 

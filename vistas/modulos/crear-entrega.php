@@ -71,7 +71,7 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
                     <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" class="form-control pull-right" id="datepicker" value="<?php echo date("d/m/Y"); ?>" readonly name="fechaEntrega" autocomplete="off">
+                    <input type="text" class="form-control pull-right datepicker" value="<?php echo date("d/m/Y"); ?>" readonly name="fechaEntrega" autocomplete="off">
                   </div>
 
                 </div>
@@ -182,7 +182,7 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
             ENTRADA OBSERVACIONES
             ======================================-->
             <div class="form-group">
-            <p><strong>Observaciones</strong> </p>
+            <p><strong>Observaciones:</strong> </p>
               <div class="input-group">
 
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
@@ -234,7 +234,7 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
                 $item = null;
                 $valor = null;
 
-                $respuesta = ControladorPedidos::ctrMostrarPedidos($item, $valor);
+                $respuesta = ControladorPedidos::ctrMostrarPedidosSinEntrega($item, $valor);
 
                 foreach ($respuesta as $key => $value) {
 
@@ -247,7 +247,7 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
                 $itemEntrega = $value["entregas_id"];
                 $valorEntrega = "Entrega N° ".$value['entregas_id'];
 
-                //BUSCAR LA ENTREGA ASOCIAADA
+                //BUSCAR LA ENTREGA ASOCIADA
                 $itemA = "id";
                 $entregasAsociadas = ControladorEntregas::ctrMostrarEntregas($itemA,$itemEntrega);
 

@@ -10,8 +10,8 @@ class ControladorUsuarios{
 
 		if(isset($_POST["ingUsuario"])){
 
-			if(preg_match('/^[a-zA-Z0-9]+$/', $_POST["ingUsuario"]) &&
-			   preg_match('/^[a-zA-Z0-9]+$/', $_POST["ingPassword"])){
+			if(preg_match('/^[a-zA-Z0-9,.]+$/', $_POST["ingUsuario"]) &&
+			   preg_match('/^[a-zA-Z0-9,.]+$/', $_POST["ingPassword"])){
 
 			   	$encriptar = crypt($_POST["ingPassword"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
 
@@ -39,7 +39,7 @@ class ControladorUsuarios{
 						REGISTRAR FECHA PARA SABER EL ÚLTIMO LOGIN
 						=============================================*/
 
-						date_default_timezone_set('America/Bogota');
+						date_default_timezone_set('America/Argentina/Buenos_Aires');
 
 						$fecha = date('Y-m-d');
 						$hora = date('H:i:s');
@@ -91,8 +91,8 @@ class ControladorUsuarios{
 
 		if(isset($_POST["nuevoUsuario"])){
 
-			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["nuevoNombre"]) &&
-			   preg_match('/^[a-zA-Z0-9]+$/', $_POST["nuevoUsuario"]) &&
+			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ,. ]+$/', $_POST["nuevoNombre"]) &&
+			   preg_match('/^[a-zA-Z0-9,.]+$/', $_POST["nuevoUsuario"]) &&
 			   preg_match('/^[a-zA-Z0-9]+$/', $_POST["nuevoPassword"])){
 
 			   	/*=============================================
@@ -255,7 +255,7 @@ class ControladorUsuarios{
 
 		if(isset($_POST["editarUsuario"])){
 
-			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["editarNombre"])){
+			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ,. ]+$/', $_POST["editarNombre"])){
 
 				/*=============================================
 				VALIDAR IMAGEN
@@ -375,7 +375,8 @@ class ControladorUsuarios{
 							   "usuario" => $_POST["editarUsuario"],
 							   "password" => $encriptar,
 							   "perfil" => $_POST["editarPerfil"],
-							   "foto" => $ruta);
+							   "foto" => $ruta,
+							 "id" => $_POST["idUsuario"]);
 
 				$respuesta = ModeloUsuarios::mdlEditarUsuario($tabla, $datos);
 

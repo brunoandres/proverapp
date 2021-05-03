@@ -40,6 +40,29 @@ class ModeloEntregas{
 	}
 
 	/*=============================================
+	MOSTRAR CANTIDAD DE PEDIDOS POR ENTREGA EN ESTADO PREPARADO
+	=============================================*/
+	static public function mdlMostrarPedidosPreparados($tabla, $item, $valor){
+
+		if($item != null){
+
+			$stmt = Conexion::conectar()->prepare("SELECT count(*) as cantidad FROM $tabla WHERE $item = :$item AND estados_id = 2");
+
+			$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
+
+			$stmt -> execute();
+
+			return $stmt -> fetch();
+
+		}
+
+		$stmt -> close();
+
+		$stmt = null;
+
+	}
+
+	/*=============================================
 	MOSTRAR CANTIDAD DE PEDIDOS POR ENTREGA
 	=============================================*/
 	static public function mdlMostrarCantPedidosEntrega($tabla, $item, $valor){

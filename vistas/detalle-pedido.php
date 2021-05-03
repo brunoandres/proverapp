@@ -1,10 +1,12 @@
 <?php
- if(isset($_POST["pedidos_id"])){
+require_once "../modelos/conexion.php";
+
+if(isset($_POST["pedidos_id"])){
       $output = '';
-      $connect = mysqli_connect("localhost", "soyem", "vMis823rWf", "soyem_proveeduria");
-      mysqli_set_charset($connect, "utf8");
-      $query = "SELECT * FROM pedidos WHERE id = '".$_POST["pedidos_id"]."'";
-      $result = mysqli_query($connect, $query);
+      $idPedido = $_POST["pedidos_id"];
+      $stmt = Conexion::conectar()->prepare("SELECT * FROM pedidos WHERE id = :id");
+      $stmt -> bindParam(":id",$idPedido, PDO::PARAM_INT);
+      $stmt -> execute();
 
       $output .= '
       <table class="table">
@@ -16,16 +18,18 @@
           </tr>
         </thead>
         <tbody>';
-      while($row = mysqli_fetch_array($result)){
+      //while($row = mysqli_fetch_array($result)){
+      foreach ($stmt as $key => $pedido) {
 
-          $listaProducto = json_decode($row["productos"], true);
+
+          $listaProducto = json_decode($pedido["productos"], true);
           if(!empty($listaProducto)){
             foreach ($listaProducto as $key => $value) {
 
 
              $output .= '
              <tr>
-                <td>'.$value["descripcion"].'</td>
+                <td>'.$value["nombre"].' '.$value["descripcion"].'</td>
                 <td><label class="label label-default">'.$value["cantidad"].'</label></td>
                 <td><label class="label label-default">$ '.$value["precio"].'</label></td>
               </tr>
@@ -40,9 +44,10 @@
             </div>";
           }
           $output.='
-          <td>Pago en Efectivo : $ '.$row["pago_efectivo"].'</td>
-          <td>Pago por Planilla : $ '.$row["pago_planilla"].'</td>
-          <td>Comprobante : '.$row["comprobante"].'</td>';
+          <td>Pago en Efectivo : $ '.$pedido["pago_efectivo"].'</td>
+          <td>Pago por Planilla : $ '.$pedido["pago_planilla"].'</td>
+          <td>Comprobante : '.$pedido["comprobante"].'</td>
+          <td>Nro Asiento : <strong>'.$pedido["fk_nro_asiento"].'</strong></td>';
       }
       $output .= "</tbody>
       </table>";

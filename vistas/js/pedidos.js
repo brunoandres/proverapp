@@ -61,7 +61,7 @@ $(".tablaPedidos tbody").on("click", "button.agregarProducto", function(){
       	dataType:"json",
       	success:function(respuesta){
 
-      	    var descripcion = respuesta["descripcion"];
+      	    var descripcion = respuesta["nombre"]+' '+respuesta["descripcion"];
           	var stock = respuesta["stock"];
           	var precio = respuesta["precio"];
 
@@ -71,7 +71,7 @@ $(".tablaPedidos tbody").on("click", "button.agregarProducto", function(){
 
           	if(stock == 0){
         			swal({
-  			      title: "No hay stock disponible",
+  			      title: "No hay stock disponible!",
   			      type: "error",
   			      confirmButtonText: "¡Cerrar!"
   			    });
@@ -492,6 +492,8 @@ $("#pagoEfectivo").number(true, 2);
 $(".nuevoPrecioProducto").number(true, 2);
 $('#pagoPlanilla').number(true, 2);
 
+
+$("#totalPedido").number(true, 2);
 /*=============================================
 SELECCIONAR MÉTODO DE PAGO, DEFINIMOS 3 TIPOS DE PAGO
 EFECTIVO, DESCUENTO POR PLANILLA, Y MERCADOPAGO
@@ -541,7 +543,7 @@ $("#metodoPago").change(function(){
 
 			 '</div>'+
 			 '<div class="col-xs-4" id="capturarPagoPlanilla" style="padding-left:0px">'+
-			 '<label>Descuento Planilla</label>'+
+			 '<label>Descuento Planilla:</label>'+
 			 	'<div class="input-group">'+
 
 			 		'<span class="input-group-addon"><i class="ion ion-social-usd"></i></span>'+
@@ -561,7 +563,7 @@ $("#metodoPago").change(function(){
 		$(this).parent().parent().parent().children(".cajasMetodoPago").html(
 
 			'<div class="col-xs-6" id="pagoSoloPlanilla" style="padding-left:0px">'+
-			'<label>Descuento Planilla</label>'+
+			'<label>Descuento Planilla:</label>'+
 				'<div class="input-group">'+
 
 					'<span class="input-group-addon"><i class="ion ion-social-usd"></i></span>'+
@@ -583,7 +585,7 @@ $("#metodoPago").change(function(){
 		 $(this).parent().parent().parent().children('.cajasMetodoPago').html(
 
 		 	'<div class="col-xs-6" style="padding-left:0px">'+
-			 '<label>N° Comprobante</label>'+
+			 '<label>N° Comprobante:</label>'+
                 '<div class="input-group">'+
 
                   '<input type="text" class="form-control" value="'+comprobanteBD+'" id="nuevoCodigoTransaccion" name="comprobante" placeholder="Código comprobante" required autocomplete="off">'+
@@ -826,6 +828,44 @@ $(".tablas").on("click", ".btnEliminarPedido", function(){
         if (result.value) {
 
             window.location = "index.php?ruta=pedidos&idPedido="+idPedido;
+        }
+
+  })
+  //Date picker
+  $('#datepicker').datepicker({
+	autoclose: true
+  })
+
+})
+
+/*=============================================
+CARGAR PRESTAMO SISTEMA ADMINISTRATIVO
+=============================================*/
+$(".tablas").on("click", ".btnCargarPrestamo", function(){
+
+  var idPedido = $(this).attr("idPedido");
+  var claveAfiliado = $(this).attr("claveAfiliado");
+  var tipoCancelacion = 'M';
+  var montoPrestamo = $(this).attr("montoPrestamo");
+  var cuotasPrestamo = 1;
+  var tipo = "Soyem";
+  var formaEntrega = "Proveduria";
+  var fechaPago = $(this).attr("fechaPago");
+
+  swal({
+        title: '¿Confirma guardar prestamo en Sistema Administrativo?',
+        text: "¡Si no lo está puede cancelar la accíón!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Si, guardar prestamo!'
+      }).then(function(result){
+        if (result.value) {
+
+            window.location = "index.php?ruta=pedidos&ref="+idPedido+"&claveAfiliado="+claveAfiliado+"&tipoC="+tipoCancelacion+"&montoPrestamo="+montoPrestamo+"&cuotas="+cuotasPrestamo
+            +"&tipo="+tipo+"&formaEntrega="+formaEntrega+"&fechaPago="+fechaPago;
         }
 
   })

@@ -70,9 +70,9 @@ class TablaProductosPedidos{
 
 		  	$datosJson .='[
 			      "'.($i+1).'",
-			      "'.$imagen.'",
-				  	"$ '.$productos[$i]["precio"].'",
-			      "'.$productos[$i]["descripcion"].'",
+						"'.$productos[$i]["nombre"].'",
+						"'.$productos[$i]["descripcion"].'",
+				  	"$ '.$productos[$i]["precio"].'", 
 			      "'.$stock.'",
 			      "'.$botones.'"
 			    ],';

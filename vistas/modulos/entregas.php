@@ -33,7 +33,7 @@ $dato = new SED();
 
           <button class="btn btn-primary">
 
-            Agregar Nueva
+            Agregar Entrega
 
           </button>
 
@@ -68,15 +68,22 @@ $dato = new SED();
 
           $respuesta = ControladorEntregas::ctrMostrarEntregas($item, $valor);
 
+
           foreach ($respuesta as $key => $value) {
 
           //CANTIDAD DE PEDIDOS POR ENTREGA
           $item1 = "entregas_id";
           $pedidosAsignados = ControladorEntregas::ctrMostrarCantPedidosEntrega($item1,$value["id"]);
 
+
           //CANTIDAD DE PEDIDOS POR ENTREGA EN ESTADO ENTREGADOS
           $item1a = "entregas_id";
           $pedidosAsignadosEntregados = ControladorEntregas::ctrMostrarPedidosEntregados($item1a,$value["id"]);
+
+
+          //CANTIDAD DE LOS PEDIDOS EN ESTRADO PREPARADOS
+          $pedidosAsignadosPreparados = ControladorEntregas::ctrMostrarPedidosPreparados($item1a,$value["id"]);
+
 
           $cantidadPedidos = $pedidosAsignados["cantidad"];
           $cantidadEntregados = $pedidosAsignadosEntregados["cantidad"];
@@ -85,22 +92,43 @@ $dato = new SED();
           }else{
             $porcentaje = ($cantidadEntregados/$cantidadPedidos)*100;
           }
+
+
+
+          //$restantes = null;
           //BARRA PROGRESO
           if ($porcentaje != 0) {
+            //$restantes = (intval($cantidadPedidos)-intval($cantidadEntregados));
             $progreso = '<div class="progress">
               <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="'.$porcentaje.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$porcentaje.'%">
                 <span class="">'.round($porcentaje).'% Entregado</span>
-              </div>
-            </div>';
+              </div>';
+
           }else{
-            $progreso = '<div class="progress">
-              <div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                <span class="">Pendiente de Entrega</span>
-              </div>
-            </div>';
+
+            if($pedidosAsignados === $pedidosAsignadosPreparados){
+              $progreso = '<div class="progress">
+                <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                  <span class="">En preparación</span>
+                </div>
+              </div>';
+            }else{
+              $progreso = '<div class="progress">
+                <div class="progress-bar progress-bar-pendiente progress-bar-striped" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                  <span class="">Pendiente</span>
+                </div>
+              </div>';
+            }
+
           }
-          $botonAcciones = " disabled='disabled'";
-          if ($_SESSION["perfil"] == "Administrador") {
+
+          $botonAcciones = "";
+          if ($porcentaje === 100) {
+            $botonAcciones = " disabled='disabled'";
+          }
+
+
+          /*if ($_SESSION["perfil"] == "Administrador") {
             $botonAcciones = "";
             $botonEliminar = '<button class="btn btn-danger btnEliminarEntrega" idEntrega="'.$value["id"].'"><i class="fa fa-times"></i></button>';
 
@@ -109,7 +137,7 @@ $dato = new SED();
               $botonAcciones = "";
             }
             $botonEliminar = "";
-          }
+          }*/
 
           echo '<tr>
 
@@ -128,18 +156,19 @@ $dato = new SED();
                   <td>
 
                     <div class="btn-group">
-                      <button class="btn btn-default btnImprimirPedidos" title="Imprimir Pedidos" id="'.$value["id"].'">
+                      <button class="btn btn-default btn-xs btnImprimirPedidos" title="Imprimir Pedidos" id="'.$value["id"].'">
 
                         <i class="fa fa-print"></i>
 
                       </button>
-                      <button type="button" name="view" title="Ver Detalle" value="Ver" id="'.$value["id"].'" class="btn btn-info entregas_detalle"><i class="fa fa-eye"></i></button>
-                      <button '.$botonAcciones.' title="Editar estados Pedidos" class="btn btn-warning btnEditarPedidos" idEntrega="'.$value["id"].'" data-toggle="modal" data-target="#modalEditarPedidos"><i class="fa fa-pencil"></i></button>
-                      <button '.$botonAcciones.' title="Edita Entrega" class="btn btn-danger btnEditarEntrega" idEntrega="'.$dato::encryption($value["id"]).'"><i class="fa fa-pencil"></i></button>
-                      '.
-                      $botonEliminar
+                      <button type="button" name="view" title="Ver Detalle" value="Ver" id="'.$value["id"].'" class="btn btn-info btn-xs entregas_detalle"><i class="fa fa-eye"></i></button>
+                      <button '.$botonAcciones.' title="Edita Entrega" class="btn btn-warning btn-xs btnEditarEntrega" idEntrega="'.$dato::encryption($value["id"]).'"><i class="fa fa-pencil"></i></button>
+                      <button '.$botonAcciones.' title="Editar estados Pedidos" class="btn btn-danger btn-xs btnEditarPedidos" idEntrega="'.$value["id"].'" data-toggle="modal" data-target="#modalEditarPedidos"><i class="fa fa-cog"></i></button>
 
-                      .'
+                      '.
+                      /*$botonEliminar
+
+                      .'*/'
 
 
                     </div>

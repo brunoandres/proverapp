@@ -25,11 +25,7 @@
 
       <div class="box-header with-border">
 
-        <!--<button class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarAfiliado">
-
-          Agregar Afiliado
-
-        </button>-->
+        <a href="afiliados-no-socios">Ver Afiliados No Socios</a>
 
       </div>
 
@@ -43,7 +39,7 @@
             <th>Nombre Afiliado</th>
             <th>Legajo</th>
             <th>Documento</th>
-            <!--<th>Opciones</th>-->
+            <th>Opciones</th>
           </tr>
 
         </thead>

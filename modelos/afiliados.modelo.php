@@ -4,6 +4,18 @@ require_once "conexion.php";
 
 class ModeloAfiliados{
 
+	static public function mdlComprasAfiliados($tabla,$item,$valor){
+
+		$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE $item = :$item AND estados_id = 3 ORDER BY fecha_pedido DESC, numero DESC");
+
+		$stmt -> bindParam(":".$item, $valor, PDO::PARAM_INT);
+
+		$stmt -> execute();
+
+		return $stmt -> fetchAll();
+
+	}
+
 	/*=============================================
 	CREAR AFILIADO
 	=============================================*/

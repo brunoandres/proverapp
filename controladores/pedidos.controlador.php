@@ -4,6 +4,154 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
 class ControladorPedidos{
 
 	/*=============================================
+	CARGAR PRESTAMO EN EL SISTEMA ADMINISTRATIVO CORRESPONDIENTE A LOS PEDIDOS
+	==============================================*/
+
+	static public function ctrCargarPrestamo(){
+
+		if (isset($_GET["claveAfiliado"])) {
+
+			$claveAfiliado = SED::decryption($_GET["claveAfiliado"]);
+			$idPedido = SED::decryption($_GET["ref"]);
+
+			$tabla = "pedidos";
+			$item1 = "id";
+			$valor1 = $idPedido;
+			$item2 = "vinculado";
+			$valor2 = "1";
+
+			//COMPROBAR QUE EXISTE EL ASIENTO CARGADO CORRESPONDIENTE AL PEDIDO
+			$pedidoPrestamoCargado = ModeloPedidos::consultarPedidoPrestamo($tabla,$item1,$valor1,$item2,$valor2);
+
+			if (empty($pedidoPrestamoCargado)) {
+				$fechaPrestamo = date("Y-m-d");
+				$pclave = ModeloPedidos::consultaPrestamos();
+
+				foreach ($pclave as $key => $value) {
+					if (substr($value['clave_prestamo'],0,4) == date("Y") or substr($value['clave_prestamo'],0,4) == 2017) {
+						$clavePrestamo = $value['clave_prestamo'];
+					}else{
+						$clavePrestamo = date("Y").'00001';
+					}
+				}
+
+				ini_set('memory_limit', '64M');
+
+				$nroCuotas = $_GET['cuotas'];
+				$mes = date('m', strtotime($_GET["fechaPago"]));
+				$ano = date('Y', strtotime($_GET["fechaPago"]));
+				$vencimiento = $ano.'-'.$mes.'-01';
+				$monto = SED::decryption($_GET['montoPrestamo']);
+				//$monto = $monto/$nroCuotas;
+
+				$proveedor=0;
+				$valePro="";
+
+				$efectivo = "";
+				$banco = "";
+				$proveduria = "X";
+				$lena = "";
+				$turismo = "";
+
+				$cuentaBanco = "";
+				$chequeNro = 0;
+
+				$anio = date("Y");
+
+				//CONSULTA EL ULTIMO VALE PARA ASIGNAR
+				$valesPrestamos = ModeloPedidos::consultaVale();
+
+				if (empty($valesPrestamos)) {
+					$vale = $anio."00001";
+				}else{
+					foreach ($valesPrestamos as $key => $value) {
+						$vale = $value["vale"]+1;
+					}
+				}
+
+				$tabla = "prestamos";
+				$observacionestxt= "SISTEMA PROVEEDURIA - PRESTAMO PROVEEDURIA ".date("d/m/Y");
+
+				if($_GET['tipoC']=="M"){
+					for ($conteoCuotas=1; $conteoCuotas<=$nroCuotas ;$conteoCuotas++){
+					$clavePrestamo = $clavePrestamo + 1;
+
+
+					//DATOS PARA GUARDAR
+					$datos = array("afiliado"=>$claveAfiliado,
+								   "fechaPrestamo"=>$fechaPrestamo,
+								   "clavePrestamo"=>$clavePrestamo,
+									 "conteoCuotas"=>$conteoCuotas,
+								   "nroCuotas"=>$nroCuotas,
+									 "vencimiento"=>$vencimiento,
+								   "monto"=>str_replace(",","",$monto),
+								   "efectivo"=>$efectivo,
+								   "banco"=>$banco,
+								   "proveduria"=>$proveduria,
+								   "lena"=> $lena,
+									 "turismo"=> $turismo,
+									 "cuentaBanco"=> $cuentaBanco,
+								   "chequeNro"=> $chequeNro,
+									 "valePro"=> $valePro,
+									 "proveedor"=>$proveedor,
+									 "cuotasPro"=>1,
+									 "vale"=>$vale,
+									 "cuentaMotivo"=>0,
+									 "banc"=>'no',
+									 "tipe_p"=>$_GET['tipoC'],
+									 "tipoPago"=>"",
+									 "observaciones"=>$observacionestxt,
+								 	 "usuario"=>$_SESSION["usuario"],
+									 "idPedido"=>$idPedido);
+
+					$respuesta = ModeloPedidos::guardarPrestamo($tabla,$datos);
+
+					}
+
+					if ($respuesta != "") {
+
+						$tabla = "pedidos";
+						$actualizarPedido = ModeloPedidos::actualizarPedido($tabla,$idPedido,$respuesta);
+
+						if ($actualizarPedido == "ok") {
+							echo'<script>
+
+							swal({
+								title: "Prestamo guardado correctamente!",
+								text: "Redireccionando...",
+								type: "success",
+								timer: 2000
+							}).then(function() {
+									window.location = "pedidos";
+							});
+
+							</script>';
+							exit();
+						}
+					}
+				}
+			}else{
+				echo'<script>
+
+				swal({
+					title: "El prestamo del pedido ya ha sido guardado en el Sistema Administrativo",
+					text: "Redireccionando...",
+					type: "warning",
+					timer: 4000
+				}).then(function() {
+						window.location = "pedidos";
+				});
+
+				</script>';
+				exit();
+			}
+
+
+		}
+
+	}
+
+	/*=============================================
 	CAMBIAR ESTADO DE LOS PEDIDOS EN UNA ENTREGA, DESDE LA VISTA DE ENTREGAS
 	CAMBIO MASIVO DE TODOS LOS PEDIDOS ASOCIADOS A UNA ENTREGA PARA NO HACERLO UNO POR UNO
 	==============================================*/
@@ -60,26 +208,6 @@ class ControladorPedidos{
 					$respuesta = true;
 				}
 			}
-			/*if ($respuesta == true) {
-
-				echo'<script>
-
-				swal({
-					  type: "success",
-					  title: "Pedidos seleccionados, editados correctamente!",
-					  showConfirmButton: true,
-					  confirmButtonText: "Cerrar"
-					  }).then(function(result){
-								if (result.value) {
-
-								window.location = "pedidos";
-
-								}
-							})
-
-				</script>';
-
-			}*/
 
 		}
 
@@ -94,6 +222,20 @@ class ControladorPedidos{
 		$tabla = "pedidos";
 
 		$respuesta = ModeloPedidos::mdlMostrarPedidos($tabla, $item, $valor);
+
+		return $respuesta;
+
+	}
+
+	/*=============================================
+	LISTAR PEDIDOS
+	=============================================*/
+
+	static public function ctrMostrarPedidosSinEntrega($item, $valor){
+
+		$tabla = "pedidos";
+
+		$respuesta = ModeloPedidos::mdlMostrarPedidosSinEntrega($tabla, $item, $valor);
 
 		return $respuesta;
 
@@ -153,6 +295,7 @@ class ControladorPedidos{
 			ACTUALIZAR LOS PEDIDOS DEL AFILIADO Y REDUCIR EL STOCK Y AUMENTAR LAS ENTREGAS DE LOS PRODUCTOS
 			=============================================*/
 
+			//DEVUELVE UN MSJ DE ERROR SI EL PEDIDO VIENE VACÍO
 			if($_POST["listaProductos"] == ""){
 
 				echo'<script>
@@ -188,17 +331,24 @@ class ControladorPedidos{
 			$fecha = str_replace('/', '-', $_POST['fechaPedido']);
 			$fechaPedido = date('Y-m-d', strtotime($fecha));
 
+			$fechaDePago = str_replace('/', '-', $_POST['fechaPago']);
+			$fechaPago = date('Y-m-d', strtotime($fechaDePago));
+
 			$datos = array("fecha"=>$fechaPedido,
 						   "usuario"=>$_POST["idUsuario"],
 						   "afiliado"=>$_POST["seleccionarAfiliado"],
 						   "productos"=>$_POST["listaProductos"],
-						   "total"=>$_POST["totalPedido"],
+							 "total"=>str_replace(",","",$_POST["totalPedido"]),
 						   "pagoEfectivo"=>$pagoEfectivo,
 						   "pagoPlanilla"=>$pagoPlanilla,
 						   "comprobante"=>$comprobante,
 						   "metodo_pago"=>$_POST["metodoPago"],
 						   "estado"=> $_POST["estadoPedido"],
-						   "observaciones"=> $_POST["observaciones"]);
+						   "observaciones"=> $_POST["observaciones"],
+						 	"fechaPago"=>$fechaPago);
+
+							 /*var_dump($datos);
+							 exit();*/
 
 			$respuesta = ModeloPedidos::mdlIngresarPedido($tabla, $datos);
 
@@ -379,6 +529,9 @@ class ControladorPedidos{
 			$fecha = str_replace('/', '-', $_POST['fechaPedido']);
 			$fechaPedido = date('Y-m-d', strtotime($fecha));
 
+			$fechaDePago = str_replace('/', '-', $_POST['fechaPago']);
+			$fechaPago = date('Y-m-d', strtotime($fechaDePago));
+
 			$datos = array("idPedido"=>$_POST["idPedido"],
 						   "fechaPedido"=>$fechaPedido,
 						   "afiliado"=>$_POST["seleccionarAfiliado"],
@@ -391,7 +544,8 @@ class ControladorPedidos{
 						   "pagoPlanilla"=>$pagoPlanilla,
 						   "comprobante"=>$comprobante,
 						   "usuario"=>$_POST["idUsuario"],
-						   "observaciones"=>$_POST["observaciones"]);
+						   "observaciones"=>$_POST["observaciones"],
+							 "fechaPago"=>$fechaPago);
 			$respuesta = ModeloPedidos::mdlEditarPedido($tabla, $datos);
 
 			/*============================================

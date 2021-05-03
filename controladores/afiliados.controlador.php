@@ -3,6 +3,18 @@
 class ControladorAfiliados{
 
 	/*=============================================
+	DEVUELVE LAS COMPRAS DEL AFILIADO
+	=============================================*/
+
+	static public function ctrComprasAfiliados($item, $valor){
+
+		$tabla = "pedidos";
+		$respuesta = ModeloAfiliados::mdlComprasAfiliados($tabla,$item,$valor);
+		return $respuesta;
+
+	}
+
+	/*=============================================
 	CREAR AFILIADO
 	=============================================*/
 

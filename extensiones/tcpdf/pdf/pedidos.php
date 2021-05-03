@@ -51,7 +51,9 @@ class ImprimirPedidos{
       $pdf->AddPage();
 
       $fecha = substr($value["fecha_pedido"],0);
+      $fechadePago = substr($value["fecha_pago"],0);
       $fechaPdf = date("d/m/Y", strtotime($fecha));
+      $fechaPago = date("d/m/Y", strtotime($fechadePago));
       $neto = number_format($value["importe"],2);
       $impuesto = number_format($value["importe"],2);
       $total = number_format($value["importe"],2);
@@ -110,7 +112,7 @@ class ImprimirPedidos{
     					Teléfono: 0294 442-0293
 
               <br>
-    					Número Entrega : '.$numeroEntrega.'
+    					Número de Entrega : '.$numeroEntrega.'
 
     				</div>
 
@@ -148,11 +150,22 @@ class ImprimirPedidos{
 
     			<td style="border: 1px solid #666; background-color:white; width:150px; text-align:right">
 
-    				Fecha: '.$fechaPdf.'
+    				Fecha Pedido: '.$fechaPdf.'
 
     			</td>
 
+
+
+
+
     		</tr>
+        <tr>
+        <td style="border: 1px solid #666; background-color:white; width:540px; text-align:right">
+
+          Fecha de Pago: '.$fechaPago.'
+
+        </td>
+        </tr>
 
     		<tr>
 
@@ -272,8 +285,8 @@ class ImprimirPedidos{
 
 
     $fechaImpresion = date("d/m/Y");
-    $file = "Entrega ".$this->id."_".$fechaImpresion.'_'.'.pdf';
-    $pdf->Output($file, 'D');
+    $file = "ENTREGA_NRO_".$numeroEntrega."_".$fechaImpresion.'_'.'.pdf';
+    $pdf->Output($file, 'I');
 
 
   }//end function

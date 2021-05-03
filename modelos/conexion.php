@@ -2,6 +2,21 @@
 
 class Conexion{
 
+	static public function conectarMysql(){
+
+		$servidor= "localhost";
+    $usuario= "root";
+    $password = "";
+    $base= "soyem";
+
+    $con = mysqli_connect($servidor, $usuario, $password ,$base)
+        or die("No se pudo conectar con la base de datos");
+		mysqli_set_charset($con, "utf8");
+
+    return $con;
+
+	}
+
 	static public function conectar(){
 
 		$link = new PDO("mysql:host=localhost;dbname=proverapp",
@@ -20,7 +35,7 @@ class ConexionSoyem{
 
 	static public function conectarSoyem(){
 
-		$link = new PDO("mysql:host=localhost;dbname=soyem_",
+		$link = new PDO("mysql:host=localhost;dbname=soyem",
 			            "root",
 			            "");
 

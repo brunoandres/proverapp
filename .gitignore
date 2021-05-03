@@ -1,1 +1,5 @@
 /modelos/conexion.php
+/vistas/detalle-entrega.php
+/vistas/detalle-pedido.php
+/vistas/select-afiliado.php
+/vistas/traer-afiliado.php

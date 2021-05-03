@@ -83,7 +83,7 @@ class TablaProductos{
 
   				$stock = "<button class='btn btn-danger'>".$productos[$i]["stock"]."</button>";
 
-  			}else if($productos[$i]["stock"] > 11 && $productos[$i]["stock"] <= 15){
+  			}else if($productos[$i]["stock"] >= 11 && $productos[$i]["stock"] <= 20){
 
   				$stock = "<button class='btn btn-warning'>".$productos[$i]["stock"]."</button>";
 

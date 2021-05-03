@@ -32,13 +32,13 @@
 
         <button class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarProducto" <?php echo $botonAcciones; ?>>
 
-          Agregar producto
+          Agregar Producto
 
         </button>
 
-        <label class="label label-danger">STOCK BAJO</label>
-        <label class="label label-warning">STOCK MEDIO</label>
-        <label class="label label-success">STOCK ALTO</label>
+        <button type="button" class="btn btn-danger" name="button">STOCK BAJO</button>
+        <button type="button" class="btn btn-warning" name="button">STOCK MEDIO</button>
+        <button type="button" class="btn btn-success" name="button">STOCK ALTO</button>
 
       </div>
 
@@ -51,7 +51,7 @@
           <tr>
 
            <th>Nombre</th>
-           <th>Desc.</th>
+           <th>Descripción</th>
            <th>Categoria</th>
            <th>Stock</th>
            <th>Precio</th>
@@ -94,7 +94,7 @@ MODAL AGREGAR PRODUCTO
 
           <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-          <h4 class="modal-title">Agregar producto</h4>
+          <h4 class="modal-title">Agregar Nuevo Producto</h4>
 
         </div>
 
@@ -144,7 +144,7 @@ MODAL AGREGAR PRODUCTO
 
                     <span class="input-group-addon"><i class="fa fa-th"></i></span>
 
-                    <select class="form-control input-lg select2" style="width:100%!important;" id="nuevaCategoria" name="categoria" required>
+                    <select class="form-control input-lg" style="width:100%!important;" id="nuevaCategoria" name="categoria" required>
 
                       <option value="">Selecionar categoría</option>
 
@@ -199,7 +199,7 @@ MODAL AGREGAR PRODUCTO
 
                 <span class="input-group-addon"><i class="fa fa-th"></i></span>
 
-                <select class="form-control input-lg select2" style="width:100%!important;" name="medida" required >
+                <select class="form-control input-lg" style="width:100%!important;" name="medida" required >
 
                   <option value="">Selecionar unidad medida</option>
 
@@ -247,9 +247,9 @@ MODAL AGREGAR PRODUCTO
 
                     <div class="input-group">
 
-                      <span class="input-group-addon"><i class="fa fa-arrow-up"></i></span>
+                      <span class="input-group-addon"><i class="ion ion-social-usd"></i></span>
 
-                      <input type="number" class="form-control input-lg" name="precio" min="0" step="any" placeholder="Precio" required>
+                      <input type="number" class="form-control input-lg" name="precio" min="0" step="any" placeholder="Ingresar precio" required>
 
                     </div>
 
@@ -410,7 +410,7 @@ MODAL EDITAR PRODUCTO
 
                 <span class="input-group-addon"><i class="fa fa-product-hunt"></i></span>
 
-                <input type="text" class="form-control input-lg" id="editarDescripcion" name="editarDescripcion" required autocomplete="off">
+                <input type="text" class="form-control input-lg" id="editarDescripcion" name="editarDescripcion" placeholder="Ingresar descripción" required autocomplete="off">
 
               </div>
 
@@ -424,7 +424,7 @@ MODAL EDITAR PRODUCTO
 
                 <span class="input-group-addon"><i class="fa fa-th"></i></span>
 
-                <select class="form-control input-lg select2" style="width:100%!important;" id="editarUnidad" name="editarUnidad" required>
+                <select class="form-control" style="width:100%!important;" id="editarUnidad" name="editarUnidad" required>
 
                   <option value="">Selecionar unidad medida</option>
 
@@ -457,7 +457,7 @@ MODAL EDITAR PRODUCTO
 
                 <span class="input-group-addon"><i class="fa fa-check"></i></span>
 
-                <input type="number" class="form-control input-lg" id="editarStock" name="editarStock" min="0" required>
+                <input type="number" class="form-control input-lg" id="editarStock" name="editarStock" placeholder="Ingresar stock" min="0" required>
 
               </div>
 
@@ -471,9 +471,9 @@ MODAL EDITAR PRODUCTO
 
                   <div class="input-group">
 
-                    <span class="input-group-addon"><i class="fa fa-arrow-up"></i></span>
+                    <span class="input-group-addon"><i class="ion ion-social-usd"></i></span>
 
-                    <input type="number" class="form-control input-lg" id="editarPrecio" name="editarPrecio" step="any" min="0" required>
+                    <input type="number" class="form-control input-lg" id="editarPrecio" name="editarPrecio" placeholder="Ingresar precio" step="any" min="0" required>
 
                   </div>
 

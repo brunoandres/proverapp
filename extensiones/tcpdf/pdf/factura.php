@@ -1,5 +1,6 @@
 <?php
 date_default_timezone_set('America/Argentina/Buenos_Aires');
+ob_end_clean();
 ob_start();
 ini_set('display_errors', 0);
 error_reporting(0);
@@ -28,11 +29,14 @@ $valorPedido = $this->codigo;
 
 $respuestaPedidos = ControladorPedidos::ctrMostrarPedidos($itemPedido, $valorPedido);
 $fecha = substr($respuestaPedidos["fecha_pedido"],0);
+$fechadePago = substr($respuestaPedidos["fecha_pago"],0);
 $fechaPdf = date("d/m/Y", strtotime($fecha));
+$fechaPago = date("d/m/Y", strtotime($fechadePago));
 $productos = json_decode($respuestaPedidos["productos"], true);
 $neto = number_format($respuestaPedidos["importe"],2);
 $impuesto = number_format($respuestaPedidos["importe"],2);
 $total = number_format($respuestaPedidos["importe"],2);
+$nroPedido = $respuestaPedidos["numero"];
 
 //TRAEMOS LA INFORMACIÓN DEL CLIENTE
 
@@ -99,7 +103,7 @@ $bloque1 = <<<EOF
 					Teléfono: 0294 442-0293
 
 					<br>
-					pedidos@soyembariloche.com.ar
+
 
 				</div>
 
@@ -141,11 +145,17 @@ $bloque2 = <<<EOF
 
 			<td style="border: 1px solid #666; background-color:white; width:150px; text-align:right">
 
-				Fecha: $fechaPdf
+				Fecha Pedido: $fechaPdf
 
 			</td>
 
 		</tr>
+
+		<tr><td style="border: 1px solid #666; background-color:white; width:540px; text-align:right">
+
+			Fecha de Pago: $fechaPago
+
+		</td></tr>
 
 		<tr>
 
@@ -202,8 +212,8 @@ $pdf->writeHTML($bloque3, false, false, false, false, '');
 
 foreach ($productos as $key => $item) {
 
-$itemProducto = "descripcion";
-$valorProducto = $item["descripcion"];
+$itemProducto = "id";
+$valorProducto = $item["id"];
 $orden = null;
 
 $respuestaProducto = ControladorProductos::ctrMostrarProductos($itemProducto, $valorProducto, $orden);
@@ -281,6 +291,14 @@ $bloque5 = <<<EOF
 
 	</table>
 
+	<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+
+
+	<td style="border: 1px solid #666; color:#333; background-color:white; text-align:right">
+
+		_________________________________
+	</td>
+
 EOF;
 ob_end_clean();
 
@@ -292,9 +310,9 @@ $pdf->writeHTML($bloque5, false, false, false, false, '');
 //SALIDA DEL ARCHIVO
 
 
-$file = $respuestaAfiliado["nombre"].'_'.$fecha.'.pdf';
+$file = "PEDIDO_NRO_".$nroPedido."_".$respuestaAfiliado["nombre"].'_'.$fecha.'.pdf';
 
-$pdf->Output($file, 'D');
+$pdf->Output($file,  'I', false);
 
 }
 

@@ -4,7 +4,9 @@
 
 		<ul class="sidebar-menu">
 
-			<li class="active">
+			<li class="<?php if ($_GET["ruta"] == "inicio") {
+				echo "active";
+			} ?>">
 
 				<a href="inicio">
 
@@ -16,7 +18,9 @@
 			</li>
 
 
-			<li>
+			<li class="<?php if ($_GET["ruta"] == "afiliados" || $_GET["ruta"] == "afiliados-no-socios" | $_GET["ruta"] == "afiliado-detalle") {
+				echo "active";
+			} ?>">
 
 				<a href="afiliados">
 
@@ -27,7 +31,9 @@
 
 			</li>
 
-			<li>
+			<li class="<?php if ($_GET["ruta"] == "categorias") {
+				echo "active";
+			} ?>">
 
 				<a href="categorias">
 
@@ -38,7 +44,9 @@
 
 			</li>
 
-			<li>
+			<li class="<?php if ($_GET["ruta"] == "productos") {
+				echo "active";
+			} ?>">
 
 				<a href="productos">
 
@@ -51,9 +59,11 @@
 
 			<?php
 
-			if ($_SESSION["usuario"] == "admin" ){ ?>
+			if ($_SESSION["perfil"] == "Administrador" ){ ?>
 
-			<li>
+			<li class="<?php if ($_GET["ruta"] == "usuarios") {
+				echo "active";
+			} ?>">
 
 				<a href="usuarios">
 
@@ -77,7 +87,33 @@
 
 			</li>-->
 
-			<li class="treeview">
+			<li class="<?php if ($_GET["ruta"] == "pedidos") {
+				echo "active";
+			} ?>">
+
+				<a href="pedidos">
+
+					<i class="fa fa-list"></i>
+					<span>Pedidos</span>
+
+				</a>
+
+			</li>
+
+			<li class="<?php if ($_GET["ruta"] == "entregas") {
+				echo "active";
+			} ?>">
+
+				<!--<a href="entregas">
+
+					<i class="fa fa-list"></i>
+					<span>Entregas</span>
+
+				</a>-->
+
+			</li>
+
+			<!--<li class="treeview">
 
 				<a href="#">
 
@@ -181,7 +217,7 @@
 
 						</a>
 
-					</li>-->
+					</li>-->-->
 
 				</ul>
 

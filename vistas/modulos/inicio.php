@@ -4,7 +4,7 @@
 
     <h1>
 
-      Bienvendio/a <?php echo $_SESSION["nombre"]; ?>
+      Bienvenido/a <?php echo $_SESSION["nombre"]; ?>
 
       <small>Sistema de Proveeduria</small>
 

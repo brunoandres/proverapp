@@ -12,11 +12,25 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <title>ProverApp Soyem</title>
+  <title>PROVEEDURIA SOYEM</title>
 
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
+  <style>
+  .progress-bar-pendiente {
+    background-color: #9C9891 !important;
+  }
+  .progress-striped .progress-bar-pendiente {
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent)!important;
+    background-image:      -o-linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent)!important;
+    background-image:         linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent)!important;
+  }
+  </style>
+
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+</style>
   <link rel="icon" href="vistas/img/plantilla/icono-blanco.png">
 
    <!--=====================================
@@ -40,8 +54,8 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
   <!-- AdminLTE Skins -->
   <link rel="stylesheet" href="vistas/dist/css/skins/_all-skins.min.css">
 
-  <!-- Google Font -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <!-- Google Font
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">-->
 
    <!-- DataTables -->
   <link rel="stylesheet" href="vistas/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
@@ -124,6 +138,8 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
   <!-- bootstrap datepicker -->
   <script src="vistas/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
+  <script src="vistas/bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js"></script>
+
   <!-- Toast -->
   <script src="vistas/bower_components/toast/js/toastr.min.js"></script>
 
@@ -134,7 +150,7 @@ CUERPO DOCUMENTO
 ======================================-->
 
 <!--<body class="hold-transition skin-blue sidebar-mini login-page">-->
-<body class="hold-transition skin-blue sidebar-collapse sidebar-mini login-page">
+<body class="hold-transition skin-blue sidebar-mini login-page">
   <?php
 
   if(isset($_SESSION["iniciarSesion"]) && $_SESSION["iniciarSesion"] == "ok"){
@@ -162,10 +178,13 @@ CUERPO DOCUMENTO
       if($_GET["ruta"] == "inicio"         ||
          $_GET["ruta"] == "usuarios"       ||
          $_GET["ruta"] == "afiliados"      ||
+         $_GET["ruta"] == "afiliado-detalle"      ||
+         $_GET["ruta"] == "afiliados-no-socios"      ||
          $_GET["ruta"] == "categorias"     ||
          $_GET["ruta"] == "productos"      ||
          $_GET["ruta"] == "clientes"       ||
          $_GET["ruta"] == "pedidos"        ||
+         $_GET["ruta"] == "pedidos-cargados"        ||
          $_GET["ruta"] == "compras"        ||
          $_GET["ruta"] == "crear-compra"   ||
          $_GET["ruta"] == "crear-pedido"   ||
@@ -209,9 +228,10 @@ CUERPO DOCUMENTO
   ?>
   <script>
   //Date picker
-  $('#datepicker').datepicker({
+  $('.datepicker').datepicker({
     autoclose: true,
-    format: 'dd/mm/yyyy'
+    format: 'dd/mm/yyyy',
+    language: "es"
   });
 
   </script>
@@ -238,7 +258,7 @@ CUERPO DOCUMENTO
   </script>
 
   <script>
-    //BUSCAR AFILIADOS
+    //BUSCAR AFILIADOS ACTIVOS
     $(document).ready(function(){
         var dataTable=$('#post_list').DataTable({
             "processing": true,
@@ -247,7 +267,20 @@ CUERPO DOCUMENTO
                 url:"vistas/traer-afiliados.php",
                 type:"post"
             },
-            order: [[2, 'desc']]
+            order: [[1, 'asc']]
+        });
+    });
+
+    //BUSCAR AFILIADOS ACTIVOS NO SOCIOS
+    $(document).ready(function(){
+        var dataTable=$('#afiliados_no_socios').DataTable({
+            "processing": true,
+            "serverSide":true,
+            "ajax":{
+                url:"vistas/traer-afiliados-no-socios.php",
+                type:"post"
+            },
+            order: [[1, 'asc']]
         });
     });
 
@@ -263,14 +296,31 @@ CUERPO DOCUMENTO
       data: {
        search: request.term
       },
-      success: function( data ) {
-       response( data );
+      success: function(data) {
+       response(data);
+
       }
      });
     },
     select: function (event, ui) {
       // Set selection
       $('#seleccionarAfiliado').val(ui.item.label); // display the selected text
+
+      var es_socio = ui.item.es_socio;
+      var legajo = ui.item.legajo;
+
+      if (es_socio != 1) {
+        $("#observacion").attr("required",true);
+        swal({
+          title: "El afiliado legajo "+legajo+" no está adherido a la obra social!",
+          text: "Indique el motivo del pedido en observaciones...",
+          type: "warning",
+          timer: 8000
+        }).then(function() {
+            //window.location = "crear-pedido";
+        });
+      }
+
       $('#idAfiliado').val(ui.item.value); // save selected id to input
       return false;
       },

@@ -1,10 +1,11 @@
 <?php
+require_once "../modelos/conexion.php";
  if(isset($_POST["entregas_id"])){
       $output = '';
-      $connect = mysqli_connect("localhost", "soyem", "vMis823rWf", "soyem_proveeduria");
-      mysqli_set_charset($connect, "utf8");
-      $query = "SELECT a.numero as entrega,b.*,c.nombre,d.estado FROM entregas a, pedidos b,usuarios c, estados d WHERE a.id = b.entregas_id AND d.id = b.estados_id AND b.usuarios_id = c.id AND a.id = '".$_POST["entregas_id"]."'";
-      $result = mysqli_query($connect, $query);
+      $idEntrega = $_POST["entregas_id"];
+      $stmt = Conexion::conectar()->prepare("SELECT a.numero as entrega,b.*,c.nombre,d.estado FROM entregas a, pedidos b,usuarios c, estados d WHERE a.id = b.entregas_id AND d.id = b.estados_id AND b.usuarios_id = c.id AND a.id = :id");
+      $stmt -> bindParam(":id",$idEntrega, PDO::PARAM_INT);
+      $stmt -> execute();
 
       $output .= '
       <table class="table">
@@ -18,25 +19,26 @@
         </thead>
         <tbody>';
 
-        if(mysqli_num_rows($result)>=1){
-          while($row = mysqli_fetch_array($result)){
+        if(!empty($stmt)){
+          foreach ($stmt as $key => $value) {
 
-            if($row['estado'] ==  "Pendiente"){
-              $estadoPedido = '<label class="label label-default">'.$row['estado'].'</label>';
-            }else if($row['estado'] ==  "Entregado"){
-              $estadoPedido = '<label class="label label-success">'.$row['estado'].'</label>';
-            }else if($row['estado'] ==  "Preparado"){
-              $estadoPedido = '<label class="label label-warning">'.$row['estado'].'</label>';
+
+            if($value['estado'] ==  "Pendiente"){
+              $estadoPedido = '<label class="label label-default">'.$value['estado'].'</label>';
+            }else if($value['estado'] ==  "Entregado"){
+              $estadoPedido = '<label class="label label-success">'.$value['estado'].'</label>';
+            }else if($value['estado'] ==  "Preparado"){
+              $estadoPedido = '<label class="label label-warning">'.$value['estado'].'</label>';
             }else{
-              $estadoPedido = '<label class="label label-danger">'.$row['estado'].'</label>';
+              $estadoPedido = '<label class="label label-danger">'.$value['estado'].'</label>';
             }
 
                $output .= '
                <tr>
-                  <td>'.$row["numero"].'</td>
+                  <td>'.$value["numero"].'</td>
                   <td>'.$estadoPedido.'</td>
-                  <td>'.date('d/m/Y', strtotime($row["fecha_pedido"])).'</td>
-                  <td>'.$row["nombre"].'</td>
+                  <td>'.date('d/m/Y', strtotime($value["fecha_pedido"])).'</td>
+                  <td>'.$value["nombre"].'</td>
                 </tr>
 
                 ';
