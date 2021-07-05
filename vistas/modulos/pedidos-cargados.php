@@ -69,6 +69,7 @@ if($xml){
                       <th>Legajo</th>
                       <th>Importe</th>
                       <th>Fecha Pedido</th>
+                      <th>Fecha Pago</th>
                       <th>Nro Asiento</th>
                   </tr>
               </thead>
@@ -115,6 +116,8 @@ if($xml){
                           echo '<td>$ '.number_format($value["importe"],2).'</td>
 
                           <td>'.date('d/m/Y', strtotime($value["fecha_pedido"])).'</td>
+
+                          <td>'.date('d/m/Y', strtotime($value["fecha_pago"])).'</td>
 
                           <td>'.$value["fk_nro_asiento"].'</td>
 
@@ -165,11 +168,11 @@ $(document).ready(function() {
 
           {
                 extend: 'excelHtml5',
-                title: 'Pedidos Cargados Sistema Administrativo'
+                title: 'Pedidos Cargados'
             },
             {
                 extend: 'pdfHtml5',
-                title: 'Pedidos Cargados Sistema Administrativo'
+                title: 'Pedidos Cargados'
             },
             'copyHtml5',
 

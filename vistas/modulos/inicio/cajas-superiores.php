@@ -50,7 +50,7 @@ $totalEntregas = count($entregas);
 
       <h3><?php echo $totalPedidos; ?></h3>
 
-      <p>Pedidos Generados</p>
+      <p>Pedidos Generados <?php echo date("m/Y"); ?></p>
 
     </div>
 

@@ -851,6 +851,7 @@ $(".tablas").on("click", ".btnCargarPrestamo", function(){
   var tipo = "Soyem";
   var formaEntrega = "Proveduria";
   var fechaPago = $(this).attr("fechaPago");
+	var fechaPrestamo = $(this).attr("fechaPrestamo");
 
   swal({
         title: '¿Confirma guardar prestamo en Sistema Administrativo?',
@@ -865,7 +866,7 @@ $(".tablas").on("click", ".btnCargarPrestamo", function(){
         if (result.value) {
 
             window.location = "index.php?ruta=pedidos&ref="+idPedido+"&claveAfiliado="+claveAfiliado+"&tipoC="+tipoCancelacion+"&montoPrestamo="+montoPrestamo+"&cuotas="+cuotasPrestamo
-            +"&tipo="+tipo+"&formaEntrega="+formaEntrega+"&fechaPago="+fechaPago;
+            +"&tipo="+tipo+"&formaEntrega="+formaEntrega+"&fechaPago="+fechaPago+"&fechaPrestamo="+fechaPrestamo;
         }
 
   })

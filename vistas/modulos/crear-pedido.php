@@ -37,6 +37,21 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
   exit;
 }
 
+
+//Manejo de fechas
+
+//Fecha actual pedido
+$fechaActual = date("Y-m-d");
+//Por defecto si el pedido está hecho antes del 15 pasa para el siguiente mes (el 01 del mes)
+$fechaVencimiento = date("Y/m/01", strtotime("+1 month"));
+//Fecha de cierre para pasar prestamos a descuento (despues del 15 cada mes)
+$fechaCierre = date("Y-m-15");
+//Si la fecha del pedido es mayor a la del cierre, pasa para dos mes despues
+if($fechaActual >= $fechaCierre){
+  $fechaVencimiento = date("Y/m/01", strtotime("+2 month"));
+}
+
+
 ?>
 <div class="content-wrapper">
 
@@ -92,7 +107,8 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
                         <div class="input-group-addon">
                           <i class="fa fa-calendar"></i>
                         </div>
-                        <input type="text" class="form-control pull-right datepicker" value="<?php echo date("d/m/Y"); ?>" readonly name="fechaPedido" autocomplete="off">
+
+                        <input type="text" id="fechaPedido" class="form-control pull-right datepicker" value="<?php echo date("Y/m/d"); ?>" readonly name="fechaPedido" autocomplete="off">
                       </div>
 
                     </div>
@@ -108,7 +124,12 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
                         <div class="input-group-addon">
                           <i class="fa fa-calendar"></i>
                         </div>
-                        <input type="text" class="form-control pull-right datepicker" value="<?php echo date("d/m/Y", strtotime("+1 month")); ?>" readonly name="fechaPago" autocomplete="off">
+
+
+
+
+                        <input type="hidden" id="fechaCierre" value="<?php echo $fechaCierre; ?>">
+                        <input type="text" id="fechaVencimiento" class="form-control pull-right datepicker" value="<?php echo $fechaVencimiento; ?>" readonly name="fechaPago" autocomplete="off">
                       </div>
 
                     </div>
@@ -479,7 +500,7 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
                   <th style="width: 10px">#</th>
                   <th>Nombre</th>
                   <th>Descr.</th>
-                  <th>Precio</th>          
+                  <th>Precio</th>
                   <th>Stock</th>
                   <th>Acciones</th>
                 </tr>
@@ -500,3 +521,40 @@ if ($_SESSION["perfil"] == "Administrador" or $_SESSION["perfil"] == "Pedidos") 
   </section>
 
 </div>
+
+<script>
+
+  $(document).ready(function(){
+
+    //Si se modifica la fecha del pedido
+    $("#fechaPedido").change(function(){
+
+      alert("Atención: si elige una fecha mayor o igual al 15, la fecha de pago de este préstamo irá a descuento en los próximos dos meses");
+
+      //Tomo valor de la fecha pedido
+      var fechaPedidoVal = $("#fechaPedido").val();
+      //Tomo valor de la fecha de cierre (el 15 de cada mes)
+      var fechaCierreVal = $("#fechaCierre").val();
+
+      //Convierto los campos en formato fecha para trabajarlos
+      var fechaPedido = new Date(fechaPedidoVal);
+      var fechaCierre = new Date(fechaCierreVal);
+
+      //Si la fecha del pedido es mayor o igual al 15 del mes, pasa para dos meses a partir del mes del pedido
+      //sino pasa para el siguiente mes
+      if(fechaPedido >= fechaCierre){
+
+        //Seteo fecha de vencimiento para dos meses posterior al mes del pedido
+        <?php $fechaVencimiento = date("Y/m/01", strtotime("+2 month")); ?>
+        $("#fechaVencimiento").val("<?php echo $fechaVencimiento; ?>");
+
+      }else {
+        //Seteo fecha de vencimiento para 1 mes posterior al mes del pedido
+        <?php $fechaVencimiento = date("Y/m/01", strtotime("+1 month")); ?>
+        $("#fechaVencimiento").val("<?php echo $fechaVencimiento; ?>");
+      }
+
+    });
+  });
+
+</script>

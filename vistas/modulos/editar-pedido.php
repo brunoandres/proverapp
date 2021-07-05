@@ -78,7 +78,7 @@
                         <div class="input-group-addon">
                           <i class="fa fa-calendar"></i>
                         </div>
-                        <input type="text" class="form-control pull-right datepicker" value="<?php echo date('d/m/Y', strtotime($pedido['fecha_pedido'])); ?>" readonly name="fechaPedido" autocomplete="off">
+                        <input type="text" id="fechaPedido" class="form-control pull-right datepicker" value="<?php echo date('Y/m/d', strtotime($pedido['fecha_pedido'])); ?>" readonly name="fechaPedido" autocomplete="off">
                         <input type="hidden" name="idPedido" value="<?php echo $pedido['id']; ?>">
                       </div>
 
@@ -95,8 +95,8 @@
                         <div class="input-group-addon">
                           <i class="fa fa-calendar"></i>
                         </div>
-                        <input type="text" class="form-control pull-right datepicker" value="<?php echo date('d/m/Y', strtotime($pedido['fecha_pago'])); ?>" readonly name="fechaPago" autocomplete="off">
-
+                        <input type="text" id="fechaVencimiento" class="form-control pull-right datepicker" value="<?php echo date('Y/m/d', strtotime($pedido['fecha_pago'])); ?>" readonly name="fechaPago" autocomplete="off">
+                        <input type="hidden" id="fechaCierre" value="<?php echo date('Y/m/15', strtotime($pedido['fecha_pedido'])); ?>">
                       </div>
 
                     </div>
@@ -619,3 +619,34 @@ MODAL AGREGAR AFILIADO
   </div>
 
 </div>
+
+
+<script>
+
+  $(document).ready(function(){
+    
+    //Si se modifica la fecha del pedido
+    $("#fechaPedido").change(function(){
+
+      //Tomo el valor de la fecha del pedido ya guardado
+      var fechaPedidoVal = $("#fechaPedido").val();
+      //Tomo el valor de la fecha de cierre ya guardado
+      var fechaCierreVal = $("#fechaCierre").val();
+
+      var fechaPedido = new Date(fechaPedidoVal);
+      var fechaCierre = new Date(fechaCierreVal);
+
+      if(fechaPedido >= fechaCierre){
+
+        <?php $fechaVencimiento = date("Y/m/01", strtotime("+2 month")); ?>
+        $("#fechaVencimiento").val("<?php echo $fechaVencimiento; ?>");
+
+      }else {
+        <?php $fechaVencimiento = date("Y/m/01", strtotime("+1 month")); ?>
+        $("#fechaVencimiento").val("<?php echo $fechaVencimiento; ?>");
+      }
+
+    });
+  });
+
+</script>

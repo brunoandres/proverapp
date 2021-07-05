@@ -27,7 +27,7 @@ class ModeloPedidos{
 
 	}
 
-	static public function actualizarPedido($tabla,$idPedido,$nroAsiento){
+	static public function actualizarPedido($tabla,$datos){
 
 		$pdo=Conexion::conectar();
 
@@ -36,10 +36,11 @@ class ModeloPedidos{
 
 					$pdo->beginTransaction();
 
-					$stmt = $pdo->prepare("UPDATE $tabla SET fk_nro_asiento = :nro WHERE id = :id");
+					$stmt = $pdo->prepare("UPDATE $tabla SET fk_nro_asiento = :nro, clave_prestamo = :clavePrestamo WHERE id = :id");
 
-					$stmt->bindParam(":id", $idPedido, PDO::PARAM_INT);
-					$stmt->bindParam(":nro", $nroAsiento, PDO::PARAM_INT);
+					$stmt->bindParam(":id", $datos["idPedido"], PDO::PARAM_INT);
+					$stmt->bindParam(":nro", $datos["nroAsiento"], PDO::PARAM_INT);
+					$stmt->bindParam(":clavePrestamo", $datos["clavePrestamo"], PDO::PARAM_INT);
 
 					$stmt->execute();
 
@@ -202,6 +203,8 @@ class ModeloPedidos{
 	}
 
 	static public function consultaVale(){
+
+		ini_set('memory_limit', '1024M');
 
 		$anio = date("Y");
 		$stmt = ConexionSoyem::conectarSoyem()->prepare("select vale from prestamos where vale like '".$anio."%' order by vale ASC");
@@ -391,6 +394,8 @@ class ModeloPedidos{
 
 	static public function mdlMostrarPedidos($tabla, $item, $valor){
 
+		$fecha = date("Y-m")."-01";
+
 		if($item != null){
 
 			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE $item = :$item ORDER BY id ASC");
@@ -403,7 +408,7 @@ class ModeloPedidos{
 
 		}else{
 
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE activo = 1 AND NOT estados_id = 4 ORDER BY id ASC");
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE activo = 1 AND NOT estados_id = 4 AND fecha_pedido >= '$fecha' ORDER BY id ASC");
 
 			$stmt -> execute();
 

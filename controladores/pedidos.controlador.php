@@ -79,7 +79,7 @@ class ControladorPedidos{
 
 					//DATOS PARA GUARDAR
 					$datos = array("afiliado"=>$claveAfiliado,
-								   "fechaPrestamo"=>$fechaPrestamo,
+								   "fechaPrestamo"=>$_GET["fechaPrestamo"],
 								   "clavePrestamo"=>$clavePrestamo,
 									 "conteoCuotas"=>$conteoCuotas,
 								   "nroCuotas"=>$nroCuotas,
@@ -111,7 +111,16 @@ class ControladorPedidos{
 					if ($respuesta != "") {
 
 						$tabla = "pedidos";
-						$actualizarPedido = ModeloPedidos::actualizarPedido($tabla,$idPedido,$respuesta);
+
+						/*MODIFICACIONES EN LA INSERCION DEL DESCUENTO EN BASE DEL SOYEM, AGREGO EN LA TABLA PEDIDO LA CLAVE PRESTAMO PARA REFERENCIAR LUEGO EN LA BASE DEL SOYEM EN LA TABLA DE PRESTAMOS Y SABER QUE PRESTAMO PERTENCE A QUE PEDIDO DE PROVEEDURIA*/
+
+						$datosPrestamoProveeduria = null;
+
+						$datosPrestamoProveeduria = array("idPedido" => $idPedido, "nroAsiento" => $respuesta, "clavePrestamo" => $clavePrestamo );
+
+						$actualizarPedido = ModeloPedidos::actualizarPedido($tabla,$datosPrestamoProveeduria);
+
+						/* FIN MODIFICACIONES 18/06/2021 */
 
 						if ($actualizarPedido == "ok") {
 							echo'<script>

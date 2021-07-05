@@ -179,7 +179,7 @@ if($xml){
             }
 
             if ($_SESSION["usuario"] == 'graciela.huen') {
-              $btnPrestamo = '<button type="button" class="btn btn-primary btn-xs btnCargarPrestamo" '.$prestamoCargado.' idPedido="'.$dato::encryption($value["id"]).'" claveAfiliado="'.$dato::encryption($respuestaAfiliados["clave"]).'" montoPrestamo="'.$dato::encryption(number_format($value["pago_planilla"],2)).'" fechaPago="'.$value["fecha_pago"].'" title="Guardar prestamo"><i class="fa fa-check"></i></button>';
+              $btnPrestamo = '<button type="button" class="btn btn-primary btn-xs btnCargarPrestamo" '.$prestamoCargado.' idPedido="'.$dato::encryption($value["id"]).'" claveAfiliado="'.$dato::encryption($respuestaAfiliados["clave"]).'" montoPrestamo="'.$dato::encryption(number_format($value["pago_planilla"],2)).'" fechaPago="'.$value["fecha_pago"].'" fechaPrestamo="'.$value["fecha_pedido"].'" title="Guardar prestamo"><i class="fa fa-check"></i></button>';
             }
           }
 

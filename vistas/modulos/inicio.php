@@ -46,7 +46,7 @@
 
           if($_SESSION["iniciarSesion"] =="ok"){
 
-           include "reportes/grafico-pedidos.php";
+           //include "reportes/grafico-pedidos.php";
 
           }
 
@@ -60,7 +60,7 @@
 
           if($_SESSION["iniciarSesion"] =="ok"){
 
-           include "reportes/productos-mas-vendidos.php";
+           //include "reportes/productos-mas-vendidos.php";
 
          }
 
@@ -74,7 +74,7 @@
 
           if($_SESSION["iniciarSesion"] =="ok"){
 
-           include "inicio/productos-recientes.php";
+           //include "inicio/productos-recientes.php";
 
          }
 

@@ -7,7 +7,7 @@ class Conexion{
 		$servidor= "localhost";
     $usuario= "root";
     $password = "";
-    $base= "soyem";
+    $base= "soyem_";
 
     $con = mysqli_connect($servidor, $usuario, $password ,$base)
         or die("No se pudo conectar con la base de datos");
@@ -35,7 +35,7 @@ class ConexionSoyem{
 
 	static public function conectarSoyem(){
 
-		$link = new PDO("mysql:host=localhost;dbname=soyem",
+		$link = new PDO("mysql:host=localhost;dbname=soyem_",
 			            "root",
 			            "");
 

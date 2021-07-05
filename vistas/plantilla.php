@@ -230,7 +230,7 @@ CUERPO DOCUMENTO
   //Date picker
   $('.datepicker').datepicker({
     autoclose: true,
-    format: 'dd/mm/yyyy',
+    format: 'yyyy/mm/dd',
     language: "es"
   });
 
